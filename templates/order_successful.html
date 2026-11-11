@@ -1,0 +1,112 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container" style="max-width:650px; margin:40px auto;">
+
+    <div class="card shadow text-center p-4">
+
+        <h2 class="text-success">
+            Order Confirmed!
+        </h2>
+
+        <p>Your food order has been placed successfully.</p>
+
+        <hr>
+
+        <h5>Your Pickup Code</h5>
+
+        <h1 class="text-success my-3" style="letter-spacing:4px;">
+            {{ order.pickup_code }}
+        </h1>
+
+        <p class="text-muted">
+            Show this code at the canteen counter.
+        </p>
+
+        <hr>
+
+        <div class="text-start">
+
+            <p>
+                <strong>Order ID:</strong>
+                {{ order.id }}
+            </p>
+
+            <p>
+                <strong>Mobile Number:</strong>
+                {{ order.phone_number }}
+            </p>
+
+            <p>
+                <strong>Total Amount:</strong>
+                ₹{{ "%.2f"|format(order.total_amount) }}
+            </p>
+
+            <p>
+                <strong>Payment Method:</strong>
+                Cash at Canteen
+            </p>
+
+            <p>
+                <strong>Payment Status:</strong>
+
+                {% if order.payment %}
+                    <span class="badge bg-warning text-dark">
+                        {{ order.payment.payment_status|upper }}
+                    </span>
+                {% endif %}
+
+            </p>
+
+            <p>
+                <strong>Order Status:</strong>
+                {{ order.order_status|upper }}
+            </p>
+
+        </div>
+
+        <hr>
+
+        <h5>Ordered Items</h5>
+
+        {% for item in order.items %}
+
+        <div class="d-flex justify-content-between border-bottom py-2">
+
+            <span>
+                {{ item.name }} × {{ item.quantity }}
+            </span>
+
+            <span>
+                ₹{{ "%.2f"|format(item.subtotal) }}
+            </span>
+
+        </div>
+
+        {% endfor %}
+
+        <p class="text-muted mt-4">
+            Please pay cash when collecting your order.
+        </p>
+
+        <a
+            href="{{ url_for('my_orders') }}"
+            class="btn btn-primary mt-2"
+        >
+            My Orders
+        </a>
+
+        <a
+            href="{{ url_for('menu') }}"
+            class="btn btn-outline-secondary mt-2"
+        >
+            Continue Shopping
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

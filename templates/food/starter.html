@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+.food-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 25px;
+}
+.food-title {
+    text-align: center;
+    color: #9b3d00;
+    margin-bottom: 30px;
+}
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 25px;
+}
+.food-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px #0002;
+    text-align: center;
+    padding-bottom: 20px;
+    transition: 0.3s;
+}
+.food-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 8px 22px #0003;
+}
+.food-card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+}
+.food-card h3 {
+    margin: 15px 5px 8px;
+    color: #333;
+}
+.food-card p {
+    color: #e76f00;
+    font-size: 19px;
+    font-weight: bold;
+}
+.food-card form {
+    margin-top: 12px;
+}
+.food-card button {
+    background: #e76f00;
+    color: white;
+    border: none;
+    padding: 11px 25px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 15px;
+}
+.food-card button:hover {
+    background: #bd5900;
+}
+@media(max-width: 600px) {
+    .food-container { padding: 12px; }
+}
+</style>
+
+<div class="food-container">
+    <h1 class="food-title">🍗 Starters Menu</h1>
+
+    <div class="food-grid">
+
+        {% set foods = [
+            (31, "Chicken 65", 120),
+            (32, "Chicken Manchurian", 140),
+            (33, "Paneer Tikka", 130),
+            (34, "Gobi Manchurian", 100),
+            (35, "Chilli Chicken", 150),
+            (36, "Chicken Lollipop", 160),
+            (37, "Paneer 65", 120),
+            (38, "Veg Manchurian", 110),
+            (39, "Crispy Corn", 100),
+            (40, "Tandoori Chicken", 200)
+        ] %}
+
+        {% for id, name, price in foods %}
+        <div class="food-card">
+
+            {% if name == "Chicken 65" %}
+                <img src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600" alt="{{ name }}">
+
+            {% elif name == "Chicken Manchurian" %}
+                <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600" alt="{{ name }}">
+
+            {% elif name == "Paneer Tikka" %}
+                <img src="https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600" alt="{{ name }}">
+
+            {% elif name == "Gobi Manchurian" %}
+                <img src="https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=600" alt="{{ name }}">
+
+            {% elif name == "Chilli Chicken" %}
+                <img src="https://images.unsplash.com/photo-1562967914-608f82629710?w=600" alt="{{ name }}">
+
+            {% elif name == "Chicken Lollipop" %}
+                <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=600" alt="{{ name }}">
+
+            {% elif name == "Paneer 65" %}
+                <img src="https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=600" alt="{{ name }}">
+
+            {% elif name == "Veg Manchurian" %}
+                <img src="https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?w=600" alt="{{ name }}">
+
+            {% elif name == "Crispy Corn" %}
+                <img src="https://images.unsplash.com/photo-1634467524884-897d0af5e104?w=600" alt="{{ name }}">
+
+            {% elif name == "Tandoori Chicken" %}
+                <img src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=600" alt="{{ name }}">
+
+            {% endif %}
+
+            <h3>{{ name }}</h3>
+            <p>₹{{ price }}</p>
+
+            <form action="{{ url_for('add_to_cart', item_id=id) }}" method="POST">
+                <button type="submit">Add to Cart</button>
+            </form>
+
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+.hero {
+    min-height: 400px;
+    background: linear-gradient(90deg, #202b38dd, #202b3844),
+                url("https://images.unsplash.com/photo-1547592180-85f173990554?w=1400");
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    padding: 40px;
+    color: white;
+}
+
+.hero-content {
+    max-width: 550px;
+}
+
+.hero h1 {
+    font-size: 45px;
+}
+
+.hero p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+</style>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>Welcome to santhosh Food Corner</h1>
+        <p>
+            Enjoy delicious food, explore our menu and order your
+            favourite meals from our canteen.
+        </p>
+
+        <a href="{{ url_for('menu') }}" class="btn">
+            Explore Menu
+        </a>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,122 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+.food-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 25px;
+}
+
+.food-title {
+    text-align: center;
+    color: #9b3d00;
+    margin-bottom: 30px;
+}
+
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 25px;
+}
+
+.food-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px #0002;
+    text-align: center;
+    padding-bottom: 20px;
+    transition: 0.3s;
+}
+
+.food-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 8px 22px #0003;
+}
+
+.food-card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+}
+
+.food-card h3 {
+    margin: 15px 5px 8px;
+    color: #333;
+}
+
+.food-card p {
+    color: #e76f00;
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.food-card form {
+    margin-top: 12px;
+}
+
+.food-card button {
+    background: #e76f00;
+    color: white;
+    border: none;
+    padding: 11px 25px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.food-card button:hover {
+    background: #bd5900;
+}
+
+@media(max-width: 600px) {
+    .food-container {
+        padding: 12px;
+    }
+}
+</style>
+
+<div class="food-container">
+
+<h1 class="food-title">🍛 Biryani Menu</h1>
+
+<div class="food-grid">
+
+{% set foods = [
+(1, "Chicken Biryani", 160, "https://images.unsplash.com/photo-1589302168068-964664d93dc0?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"),
+(2, "Mutton Biryani", 220, "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=600"),
+(3, "Veg Biryani", 120, "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=600"),
+(4, "Paneer Biryani", 160, "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600"),
+(5, "Egg Biryani", 130, "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600"),
+(6, "Dum Biryani", 180, "https://images.unsplash.com/photo-1642821373181-696a54913e93?w=600"),
+(7, "Hyderabadi Biryani", 200, "https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?w=600"),
+(8, "Special Chicken Biryani", 250, "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600"),
+(9, "Fry Piece Biryani", 180, "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600"),
+(10, "Family Pack Biryani", 450, "https://plus.unsplash.com/premium_photo-1694141251686-16828ed92b3f?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D")
+] %}
+
+{% for id, name, price, image in foods %}
+
+<div class="food-card">
+
+    <img src="{{ image }}" alt="{{ name }}">
+
+    <h3>{{ name }}</h3>
+
+    <p>₹{{ price }}</p>
+
+    <form action="{{ url_for('add_to_cart', item_id=id) }}" method="POST">
+        <button type="submit">Add to Cart</button>
+    </form>
+
+</div>
+
+{% endfor %}
+
+</div>
+</div>
+
+{% endblock %}

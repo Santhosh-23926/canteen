@@ -1,0 +1,99 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container" style="max-width:750px; margin:40px auto; padding:25px;">
+
+    <h2 class="text-center mb-4">Confirm Your Order</h2>
+
+    <div class="card shadow-sm p-4">
+
+        <h4>Your Food Items</h4>
+
+        {% for item in cart_items %}
+
+        <div class="d-flex justify-content-between border-bottom py-3">
+
+            <span>
+                {{ item.name }} × {{ item.quantity }}
+            </span>
+
+            <strong>
+                ₹{{ "%.2f"|format(item.price * item.quantity) }}
+            </strong>
+
+        </div>
+
+        {% endfor %}
+
+        <div class="d-flex justify-content-between mt-4">
+
+            <h4>Total Amount</h4>
+
+            <h4 class="text-success">
+                ₹{{ "%.2f"|format(total) }}
+            </h4>
+
+        </div>
+
+        <hr>
+
+        <form method="POST" action="{{ url_for('confirm_order') }}">
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Mobile Number
+                </label>
+
+                <input
+                    type="tel"
+                    name="phone_number"
+                    value="{{ user.phone_number }}"
+                    class="form-control"
+                    pattern="[6-9][0-9]{9}"
+                    maxlength="10"
+                    placeholder="Enter mobile number"
+                    required
+                >
+
+            </div>
+
+            <h5 class="mt-4">Payment Method</h5>
+
+            <div class="border rounded p-3 mb-3">
+
+                <input
+                    type="radio"
+                    id="cod"
+                    name="payment_method"
+                    value="COD"
+                    checked
+                    disabled
+                >
+
+                <label for="cod">
+                    <strong>Cash at Canteen</strong>
+                </label>
+
+                <p class="text-muted mb-0">
+                    Pay the amount when collecting your food order.
+                </p>
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-success w-100 py-3"
+            >
+                Confirm Order
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

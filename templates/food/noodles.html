@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+.food-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 25px;
+}
+.food-title {
+    text-align: center;
+    color: #9b3d00;
+    margin-bottom: 30px;
+}
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 25px;
+}
+.food-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px #0002;
+    text-align: center;
+    padding-bottom: 20px;
+    transition: 0.3s;
+}
+.food-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 8px 22px #0003;
+}
+.food-card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+}
+.food-card h3 {
+    margin: 15px 5px 8px;
+    color: #333;
+}
+.food-card p {
+    color: #e76f00;
+    font-size: 19px;
+    font-weight: bold;
+}
+.food-card form {
+    margin-top: 12px;
+}
+.food-card button {
+    background: #e76f00;
+    color: white;
+    border: none;
+    padding: 11px 25px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 15px;
+}
+.food-card button:hover {
+    background: #bd5900;
+}
+@media(max-width: 600px) {
+    .food-container { padding: 12px; }
+}
+</style>
+
+<div class="food-container">
+    <h1 class="food-title">🍜 Noodles Menu</h1>
+
+    <div class="food-grid">
+
+        {% set foods = [
+            (11, "Veg Noodles", 80),
+            (12, "Egg Noodles", 100),
+            (13, "Chicken Noodles", 130),
+            (14, "Schezwan Noodles", 110),
+            (15, "Hakka Noodles", 100),
+            (16, "Paneer Noodles", 120),
+            (17, "Mixed Noodles", 150),
+            (18, "Chilli Garlic Noodles", 120),
+            (19, "Singapore Noodles", 140),
+            (20, "Special Chicken Noodles", 160)
+        ] %}
+
+        {% for id, name, price in foods %}
+        <div class="food-card">
+
+            {% if name == "Veg Noodles" %}
+                <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?w=600" alt="{{ name }}">
+
+            {% elif name == "Egg Noodles" %}
+                <img src="https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=600" alt="{{ name }}">
+
+            {% elif name == "Chicken Noodles" %}
+                <img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600" alt="{{ name }}">
+
+            {% elif name == "Schezwan Noodles" %}
+                <img src="https://images.unsplash.com/photo-1555126634-323283e090fa?w=600" alt="{{ name }}">
+
+            {% elif name == "Hakka Noodles" %}
+                <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?w=600" alt="{{ name }}">
+
+            {% elif name == "Paneer Noodles" %}
+                <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600" alt="{{ name }}">
+
+            {% elif name == "Mixed Noodles" %}
+                <img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600" alt="{{ name }}">
+
+            {% elif name == "Chilli Garlic Noodles" %}
+                <img src="https://images.unsplash.com/photo-1555126634-323283e090fa?w=600" alt="{{ name }}">
+
+            {% elif name == "Singapore Noodles" %}
+                <img src="https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=600" alt="{{ name }}">
+
+            {% elif name == "Special Chicken Noodles" %}
+                <img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600" alt="{{ name }}">
+
+            {% endif %}
+
+            <h3>{{ name }}</h3>
+            <p>₹{{ price }}</p>
+
+            <form action="{{ url_for('add_to_cart', item_id=id) }}" method="POST">
+                <button type="submit">Add to Cart</button>
+            </form>
+
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock %}

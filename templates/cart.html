@@ -1,0 +1,130 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+.cart-container {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    margin-top: 20px;
+}
+
+.cart-table th,
+.cart-table td {
+    padding: 14px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+.cart-table th {
+    background: #202b38;
+    color: white;
+}
+
+.cart-table input {
+    width: 75px;
+    margin: 0;
+}
+
+.total {
+    text-align: right;
+    margin: 25px 0;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+@media(max-width: 650px) {
+    .cart-table th,
+    .cart-table td {
+        padding: 7px;
+        font-size: 12px;
+    }
+}
+</style>
+
+<div class="cart-container">
+
+    <h1>Your Shopping Cart</h1>
+
+    {% if cart_items %}
+
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Food</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for item in cart_items %}
+
+            <tr>
+                <td>{{ item.name }}</td>
+
+                <td>₹{{ "%.2f"|format(item.price) }}</td>
+
+                <td>
+                    <form method="POST"
+                          action="{{ url_for('update_cart', item_id=item.item_id) }}">
+
+                        <input type="number"
+                               name="quantity"
+                               value="{{ item.quantity }}"
+                               min="1"
+                               required>
+
+                        <button type="submit">Update</button>
+                    </form>
+                </td>
+
+                <td>
+                    ₹{{ "%.2f"|format(item.price * item.quantity) }}
+                </td>
+
+                <td>
+                    <form method="POST"
+                          action="{{ url_for('remove_from_cart', item_id=item.item_id) }}">
+
+                        <button type="submit"
+                                style="background:#dc3545;">
+                            Remove
+                        </button>
+                    </form>
+                </td>
+            </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="total">
+        Total: ₹{{ "%.2f"|format(total) }}
+    </div>
+
+    <form action="{{ url_for('confirm_order') }}" method="POST">
+    <button type="submit" class="btn">
+        Confirm Order
+    </button>
+</form>
+
+    {% else %}
+
+        <h3>Your cart is empty.</h3>
+        <a href="{{ url_for('menu') }}" class="btn">Explore Menu</a>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

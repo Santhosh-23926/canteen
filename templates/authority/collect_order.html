@@ -1,0 +1,65 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container" style="max-width:600px; margin:50px auto;">
+
+    <div class="card shadow p-4">
+
+        <h2 class="text-center mb-4">
+            Collect Customer Order
+        </h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% for category, message in messages %}
+
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('collect_order') }}">
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Customer Pickup Code
+                </label>
+
+                <input
+                    type="text"
+                    name="pickup_code"
+                    class="form-control text-center"
+                    placeholder="Example: CAN-582941"
+                    style="font-size:22px; letter-spacing:2px;"
+                    required
+                    autofocus
+                >
+
+            </div>
+
+            <div class="alert alert-info">
+
+                Verify the customer's order and collect the cash before confirming.
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-success w-100 py-3"
+            >
+                Confirm Cash Received & Collect Order
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

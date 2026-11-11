@@ -1,0 +1,71 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+.menu-heading {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+.category-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px #0002;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.category-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.category-card h2 {
+    margin: 15px;
+}
+</style>
+
+<div class="menu-heading">
+    <h1>Our Food Categories</h1>
+    <p>Choose your favourite category.</p>
+</div>
+
+<div class="category-grid">
+
+    <div class="category-card">
+        <img src="https://plus.unsplash.com/premium_photo-1694141251686-16828ed92b3f?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D">
+        <h2>Biryani</h2>
+        <a href="{{ url_for('biryani') }}" class="btn">View Food</a>
+    </div>
+
+    <div class="category-card">
+        <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?w=600">
+        <h2>Noodles</h2>
+        <a href="{{ url_for('noodles') }}" class="btn">View Food</a>
+    </div>
+
+    <div class="category-card">
+        <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600">
+        <h2>Snacks</h2>
+        <a href="{{ url_for('snacks') }}" class="btn">View Food</a>
+    </div>
+
+    <div class="category-card">
+        <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600">
+        <h2>Starters</h2>
+        <a href="{{ url_for('starters') }}" class="btn">View Food</a>
+    </div>
+
+</div>
+
+{% endblock %}

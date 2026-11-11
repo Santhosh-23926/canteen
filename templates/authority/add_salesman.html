@@ -1,0 +1,100 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h2>Add New Salesman</h2>
+
+    <form method="POST">
+
+        <label>Salesman Name</label>
+        <input
+            type="text"
+            name="username"
+            placeholder="Enter full name"
+            required
+        >
+
+        <label>Email</label>
+        <input
+            type="email"
+            name="email"
+            placeholder="Enter email"
+            required
+        >
+
+        <label>Mobile Number</label>
+        <input
+            type="tel"
+            name="phone_number"
+            placeholder="Enter mobile number"
+            pattern="[6-9][0-9]{9}"
+            maxlength="10"
+            required
+        >
+
+        <label>Password</label>
+        <input
+            type="password"
+            name="password"
+            placeholder="Create password"
+            minlength="8"
+            required
+        >
+
+        <button type="submit">Create Salesman</button>
+
+        <a href="{{ url_for('authority_dashboard') }}">
+            Back to Dashboard
+        </a>
+
+    </form>
+</div>
+
+<style>
+.container {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+}
+
+.container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.container label {
+    display: block;
+    font-weight: bold;
+}
+
+.container input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 18px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.container button {
+    width: 100%;
+    padding: 12px;
+    background: #198754;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.container a {
+    display: block;
+    text-align: center;
+    margin-top: 18px;
+}
+</style>
+
+{% endblock %}

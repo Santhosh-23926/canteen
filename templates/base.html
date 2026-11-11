@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Canteen Management System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            color: #222;
+        }
+
+        nav {
+            background: #202b38;
+            padding: 16px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        nav .logo {
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        nav .links {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            color: #ffbd59;
+        }
+
+        nav .username {
+            color: #ffbd59;
+            font-weight: bold;
+        }
+
+        nav .verify-link {
+            background: #198754;
+            padding: 9px 13px;
+            border-radius: 5px;
+            color: white;
+        }
+
+        nav .verify-link:hover {
+            background: #146c43;
+            color: white;
+        }
+
+        nav .add-salesman-link {
+            background: #0d6efd;
+            padding: 9px 13px;
+            border-radius: 5px;
+            color: white;
+        }
+
+        nav .add-salesman-link:hover {
+            background: #0b5ed7;
+            color: white;
+        }
+
+        .main-content {
+            min-height: 75vh;
+            padding: 25px 5%;
+        }
+
+        .flash {
+            padding: 12px;
+            margin: 10px auto;
+            border-radius: 6px;
+            max-width: 1000px;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        button, .btn {
+            display: inline-block;
+            background: #e76f00;
+            color: white;
+            padding: 10px 17px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        button:hover, .btn:hover {
+            background: #c65e00;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 11px;
+            margin: 7px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #202b38;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+            }
+
+            nav .links {
+                justify-content: center;
+                gap: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a class="logo" href="{{ url_for('index') }}">
+            Food Corner
+        </a>
+        <div class="links">
+            <a href="{{ url_for('index') }}">
+                Home
+            </a>
+            <a href="{{ url_for('menu') }}">
+                Menu
+            </a>
+            {% if session.get('user_id') %}
+
+                <span class="username">
+                    Hi, {{ session.get('username') }}
+                </span>
+
+                {% if session.get('role') in ['owner', 'salesman', 'authority'] %}
+                    <a href="{{ url_for('authority_dashboard') }}">
+                        Dashboard
+                    </a>
+
+                    <a class="verify-link"
+                       href="{{ url_for('collect_order') }}">
+                        Verify Pickup Code
+                    </a>
+
+                    {% if session.get('role') == 'owner' %}
+
+                        <a class="add-salesman-link"
+                           href="{{ url_for('add_salesman') }}">
+                            Add Salesman
+                        </a>
+
+                    {% endif %}
+
+                {% else %}
+
+                    <a href="{{ url_for('view_cart') }}">
+                        Cart
+                    </a>
+
+                    <a href="{{ url_for('my_orders') }}">
+                        My Orders
+                    </a>
+
+                {% endif %}
+
+                <a href="{{ url_for('logout') }}">
+                    Logout
+                </a>
+
+            {% else %}
+                <a href="{{ url_for('view_cart') }}">
+                    Cart
+                </a>
+
+                <a href="{{ url_for('login') }}">
+                    Login
+                </a>
+
+                <a href="{{ url_for('signup') }}">
+                    Signup
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </nav>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- MAIN CONTENT -->
+
+    <div class="main-content">
+
+        {% block content %}
+        {% endblock %}
+
+    </div>
+    <footer>
+
+        <p>
+            © 2026 Food Corner | Canteen Management System
+        </p>
+
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+.food-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 25px;
+}
+.food-title {
+    text-align: center;
+    color: #9b3d00;
+    margin-bottom: 30px;
+}
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 25px;
+}
+.food-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px #0002;
+    text-align: center;
+    padding-bottom: 20px;
+    transition: 0.3s;
+}
+.food-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 8px 22px #0003;
+}
+.food-card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+}
+.food-card h3 {
+    margin: 15px 5px 8px;
+    color: #333;
+}
+.food-card p {
+    color: #e76f00;
+    font-size: 19px;
+    font-weight: bold;
+}
+.food-card form {
+    margin-top: 12px;
+}
+.food-card button {
+    background: #e76f00;
+    color: white;
+    border: none;
+    padding: 11px 25px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 15px;
+}
+.food-card button:hover {
+    background: #bd5900;
+}
+@media(max-width: 600px) {
+    .food-container { padding: 12px; }
+}
+</style>
+
+<div class="food-container">
+    <h1 class="food-title">🍟 Snacks Menu</h1>
+
+    <div class="food-grid">
+
+        {% set foods = [
+            (21, "Samosa", 20),
+            (22, "Onion Pakoda", 40),
+            (23, "Spring Rolls", 60),
+            (24, "Bread Pizza", 50),
+            (25, "French Fries", 70),
+            (26, "Mirchi Bajji", 30),
+            (27, "Chicken Nuggets", 90),
+            (28, "Chicken 65", 120),
+            (29, "Veg Cutlet", 40),
+            (30, "Paneer Pakoda", 80)
+        ] %}
+
+        {% for id, name, price in foods %}
+        <div class="food-card">
+
+            {% if name == "Samosa" %}
+                <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600" alt="{{ name }}">
+
+            {% elif name == "Onion Pakoda" %}
+                <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600" alt="{{ name }}">
+
+            {% elif name == "Spring Rolls" %}
+                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600" alt="{{ name }}">
+
+            {% elif name == "Bread Pizza" %}
+                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600" alt="{{ name }}">
+
+            {% elif name == "French Fries" %}
+                <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600" alt="{{ name }}">
+
+            {% elif name == "Mirchi Bajji" %}
+                <img src="https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?w=600" alt="{{ name }}">
+
+            {% elif name == "Chicken Nuggets" %}
+                <img src="https://images.unsplash.com/photo-1562967914-608f82629710?w=600" alt="{{ name }}">
+
+            {% elif name == "Chicken 65" %}
+                <img src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600" alt="{{ name }}">
+
+            {% elif name == "Veg Cutlet" %}
+                <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600" alt="{{ name }}">
+
+            {% elif name == "Paneer Pakoda" %}
+                <img src="https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=600" alt="{{ name }}">
+
+            {% endif %}
+
+            <h3>{{ name }}</h3>
+            <p>₹{{ price }}</p>
+
+            <form action="{{ url_for('add_to_cart', item_id=id) }}" method="POST">
+                <button type="submit">Add to Cart</button>
+            </form>
+
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock %}

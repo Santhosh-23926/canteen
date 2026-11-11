@@ -1,0 +1,440 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+.dashboard {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 15px;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.dashboard-header h1 {
+    margin-bottom: 5px;
+}
+
+.dashboard-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.dashboard-btn {
+    display: inline-block;
+    padding: 12px 20px;
+    text-decoration: none;
+    border-radius: 7px;
+    font-weight: bold;
+    color: white;
+    transition: 0.3s;
+}
+
+.add-salesman-btn {
+    background: #0d6efd;
+}
+
+.add-salesman-btn:hover {
+    background: #084298;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.collect-btn {
+    background: #198754;
+}
+
+.collect-btn:hover {
+    background: #146c43;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 25px 0;
+}
+
+.stat-card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px #0002;
+}
+
+.stat-card h3 {
+    color: #555;
+    font-size: 18px;
+}
+
+.stat-card p {
+    font-size: 25px;
+    font-weight: bold;
+    color: #e76f00;
+    margin-bottom: 0;
+}
+
+.order-card {
+    background: white;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px #0002;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.order-card table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.order-card th,
+.order-card td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.order-card th {
+    background: #f5f5f5;
+}
+
+.pickup-code {
+    background: #e8f5e9;
+    color: #198754;
+    padding: 10px 15px;
+    border-radius: 7px;
+    display: inline-block;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.paid {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.confirmed {
+    background: #cfe2ff;
+    color: #084298;
+}
+
+.collected {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.payment-info {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.empty-message {
+    text-align: center;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+}
+
+@media (max-width: 600px) {
+    .dashboard {
+        padding: 10px;
+    }
+
+    .dashboard-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .dashboard-btn {
+        text-align: center;
+        width: 100%;
+    }
+
+    .order-card {
+        padding: 12px;
+        overflow-x: auto;
+    }
+
+    .order-card table {
+        min-width: 550px;
+    }
+
+    .pickup-code {
+        font-size: 17px;
+    }
+}
+</style>
+
+<div class="dashboard">
+
+    <!-- DASHBOARD HEADER -->
+
+    <div class="dashboard-header">
+
+        <div>
+            <h1>Authority Dashboard</h1>
+
+            <p>
+                Welcome, {{ session.get('username') }}
+            </p>
+        </div>
+
+        <div class="dashboard-actions">
+
+            {% if session.get('role') == 'owner' %}
+
+                <a
+                    href="{{ url_for('add_salesman') }}"
+                    class="dashboard-btn add-salesman-btn"
+                >
+                    + Add New Salesman
+                </a>
+
+            {% endif %}
+
+            <a
+                href="{{ url_for('collect_order') }}"
+                class="dashboard-btn collect-btn"
+            >
+                Collect Customer Order
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- STATISTICS -->
+
+    <div class="stats">
+
+        <div class="stat-card">
+            <h3>Total Orders</h3>
+            <p>{{ orders|length }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Sales</h3>
+            <p>₹{{ "%.2f"|format(total_sales) }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Items Sold</h3>
+            <p>{{ total_items_sold }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Pending Payments</h3>
+            <p>{{ pending_orders }}</p>
+        </div>
+
+    </div>
+
+    <!-- CUSTOMER ORDERS -->
+
+    <h2>Customer Orders</h2>
+
+    {% if orders %}
+
+        {% for order in orders %}
+
+        <div class="order-card">
+
+            <div class="order-header">
+
+                <h3>Order #{{ order.id }}</h3>
+
+                <span class="status
+                    {% if order.order_status == 'collected' %}
+                        collected
+                    {% else %}
+                        confirmed
+                    {% endif %}
+                ">
+                    {{ order.order_status|upper }}
+                </span>
+
+            </div>
+
+            <!-- CUSTOMER DETAILS -->
+
+            <h4>Customer Details</h4>
+
+            <p><strong>Customer:</strong> {{ order.user.username }}</p>
+
+            <p><strong>Email:</strong> {{ order.user.email }}</p>
+
+            <p><strong>Registered Phone:</strong> {{ order.user.phone_number }}</p>
+
+            <p>
+                <strong>Order Mobile Number:</strong>
+                {{ order.phone_number or order.user.phone_number }}
+            </p>
+
+            <p>
+                <strong>Order Date:</strong>
+                {% if order.created_at %}
+                    {{ order.created_at.strftime("%d-%m-%Y %I:%M %p") }}
+                {% endif %}
+            </p>
+
+            <!-- PICKUP CODE -->
+
+            <h4>Pickup Information</h4>
+
+            {% if order.pickup_code %}
+
+                <div class="pickup-code">
+                    {{ order.pickup_code }}
+                </div>
+
+            {% else %}
+
+                <p>Pickup code not available for this order.</p>
+
+            {% endif %}
+
+            <!-- ORDERED ITEMS -->
+
+            <h4 style="margin-top: 20px;">Ordered Items</h4>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Food</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in order.items %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>₹{{ "%.2f"|format(item.price) }}</td>
+                        <td>₹{{ "%.2f"|format(item.subtotal) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- TOTAL -->
+
+            <h3 style="text-align: right; margin-top: 20px;">
+                Total: ₹{{ "%.2f"|format(order.total_amount) }}
+            </h3>
+
+            <!-- PAYMENT DETAILS -->
+
+            <div class="payment-info">
+
+                <h4>Payment Information</h4>
+
+                {% if order.payment %}
+
+                    <p>
+                        <strong>Payment Method:</strong>
+                        {{ order.payment.payment_method|upper }}
+                    </p>
+
+                    <p>
+                        <strong>Payment Status:</strong>
+
+                        {% if order.payment.payment_status == 'paid' %}
+                            <span class="status paid">PAID</span>
+                        {% else %}
+                            <span class="status pending">PENDING</span>
+                        {% endif %}
+                    </p>
+
+                    {% if order.payment.paid_at %}
+                        <p>
+                            <strong>Paid At:</strong>
+                            {{ order.payment.paid_at.strftime("%d-%m-%Y %I:%M %p") }}
+                        </p>
+                    {% endif %}
+
+                {% else %}
+
+                    <p>Payment information not available.</p>
+
+                {% endif %}
+
+            </div>
+
+            <!-- COLLECTION INFORMATION -->
+
+            {% if order.order_status == 'collected' %}
+
+                <div class="alert alert-success mt-3">
+                    <strong>Order Collected Successfully!</strong>
+
+                    {% if order.collected_at %}
+                        <p class="mb-0">
+                            Collected At:
+                            {{ order.collected_at.strftime("%d-%m-%Y %I:%M %p") }}
+                        </p>
+                    {% endif %}
+                </div>
+
+            {% elif order.payment and order.payment.payment_status == 'pending' %}
+
+                <div class="alert alert-warning mt-3">
+                    Cash payment is still pending.
+
+                    Ask the customer to show the pickup code and collect cash.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty-message">
+            <h3>No orders available.</h3>
+            <p>Customer orders will appear here.</p>
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
