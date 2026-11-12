@@ -15,13 +15,16 @@ app = Flask(__name__)
 
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
+
 app.config["SQLALCHEMY_DATABASE_URI"] = (
     f"mysql+pymysql://{os.getenv('DB_USER')}:"
     f"{os.getenv('DB_PASSWORD')}@"
     f"{os.getenv('DB_HOST')}:"
     f"{os.getenv('DB_PORT')}/"
-    f"{os.getenv('DB_NAME')}"
+    f"{os.getenv('DB_NAME')}?"
+    "ssl_verify_cert=true&ssl_verify_identity=true"
 )
+
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
