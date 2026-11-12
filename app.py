@@ -8,6 +8,7 @@ from datetime import datetime
 import os
 import secrets
 import re
+from sqlalchemy import inspect
 
 load_dotenv()
 
@@ -1137,8 +1138,47 @@ def collect_order():
     return render_template(
         "authority/collect_order.html"
     )
-with app.app_context():
-    db.create_all()
+# ---------------- DATABASE DIAGNOSTICS ----------------
+
+try:
+    with app.app_context():
+
+        print("\n========== DATABASE DIAGNOSTICS ==========", flush=True)
+
+        # Check database connection details
+        print("Database Host:", db.engine.url.host, flush=True)
+        print("Database Port:", db.engine.url.port, flush=True)
+        print("Database Name:", db.engine.url.database, flush=True)
+
+        # Check registered SQLAlchemy models
+        print(
+            "Registered Models:",
+            list(db.metadata.tables.keys()),
+            flush=True
+        )
+
+        print("Starting db.create_all()...", flush=True)
+
+        # Create database tables
+        db.create_all()
+
+        print("db.create_all() completed successfully!", flush=True)
+
+        # Check tables actually present in TiDB
+        inspector = inspect(db.engine)
+
+        tables = inspector.get_table_names()
+
+        print("Tables Found:", tables, flush=True)
+
+        print("========== DIAGNOSTICS COMPLETED ==========\n", flush=True)
+
+except Exception:
+
+    app.logger.exception("DATABASE TABLE CREATION FAILED")
+
+    raise
+
 
 # ---------------- RUN APPLICATION ----------------
 
